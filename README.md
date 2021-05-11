@@ -1,20 +1,16 @@
-# CBoard-v
+# EasyDataAnalysis
 
 ## 技术栈
 Vue + Vue Router + Vuex + Element-UI
-
-## 新的特性
-根据业务的需要，新增了一些特性；  
-如可以定制更复杂的布局、调整背景色：  
-![image](./images/gridster.png)
 
 ## 部署
 ### （前提）Step 0：部署 CBoard 后台
 请根据 CBoard 的官方文档部署好完整的项目，确保能访问。  
 [CBoard github](https://github.com/TuiQiao/CBoard)  
 [安装与配置文档](https://peter_zhang921.gitee.io/cboard_docsify/#/zh-cn/manual/install)
+后台代码后续也会改成用 spring boot 编写
 
-### Step 1: 编译打包 CBoard-v
+### Step 1: 编译打包 EasyDataAnalysis
 clone 本项目，  
 npm install,  
 
@@ -36,15 +32,23 @@ npm run build
 module.exports = {
   dev: {
     proxyTable: {
-        '/api':{
-            target: '修改为你的 CBoard 访问地址',
-        }
+      '/api': {
+          // 修改为实际访问CBoard后台的地址
+          target: 'http://localhost:8080/cboard_war_exploded/',
+          // secure: false, // https需要设置
+          changeOrigin: true,  // 设置跨域
+          pathRewrite: {
+            '^/api': '/'
+          },
+          headers: {
+            'Host': 'localhost',
+            // 修改为实际访问已搭好的 CBoard 项目登录，获得 cookie JSESSIONID 值，设置到下面
+            'Cookie': 'JSESSIONID='
+          }
+      }
     },
 
 ```
 
-2、访问已搭好的 CBoard 项目登录，获得 JSESSIONID 值； 
-
-3、npm install && npm run dev  
-使用Chrome浏览器访问页面，在Application中写入Cookie：name 为 "JSESSIONID", value 为上一步获得的值。
-刷新即可访问。
+2、npm install && npm run dev 
+开始调试
